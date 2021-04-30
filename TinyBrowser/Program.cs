@@ -6,15 +6,14 @@ namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
     class Program { 
         static void Main(string[] args)
         {
-            // String of titles returned from site
             var title = "<title>acme.com</title>\n<title>github.com</title>\n<title>marc.com</title>\n<title>ReMarcAble.com</title>";
-            // Get start index of each title
-            List<int> titleTags = Indexer.AllIndexesOf(title, Constants.titleTag); 
-            // Get end index of each title
-            List<int> endTitleTags = Indexer.AllIndexesOf(title, Constants.endTitleTag); 
-            // Get all titles from indexes
-            List<string> titles = Indexer.GetTitle(titleTags, Constants.stepForward, endTitleTags, title); 
-            // Print out all indexes that where found.
+            
+            List<int> titleTags = title.AllIndexesOf(Constants.titleTag);
+            
+            List<int> endTitleTags = title.AllIndexesOf(Constants.endTitleTag); 
+            
+            List<string> titles = titleTags.GetTitle(Constants.stepForward, endTitleTags, title); 
+            
             foreach (var s in titles) {
                 Console.WriteLine(s);
             }
