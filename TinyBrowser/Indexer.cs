@@ -15,10 +15,10 @@ namespace Extender {
                 indexes.Add(index);
             }
         }
-        public static List<string> GetTitle(this List<int> titleTags, int stepForward, List<int> endTitleTags, string title) {
-            if (titleTags == null)
-                throw new ArgumentException("the list can not be empty:", $"TitleTags.Count = {titleTags.Count}");
-            return (from position in titleTags let first = position + stepForward let last = endTitleTags[titleTags.IndexOf(position)] select title[first..last]).ToList();
+        public static List<string> GetString(this List<int> tags, int stepForward, List<int> endTags, string str) {
+            if (tags == null || endTags == null)
+                throw new ArgumentException("the list can not be empty:", $"TitleTags.Count = {tags.Count}");
+            return (from position in tags let first = position + stepForward let last = endTags[tags.IndexOf(position)] select str[first..last]).ToList();
         }
     }
 }
