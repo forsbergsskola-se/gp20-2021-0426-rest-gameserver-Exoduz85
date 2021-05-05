@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -32,12 +31,13 @@ namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
                 Console.WriteLine(header);
                 for (var index = 0; index < links.Count; index++) {
                     var str = links[index];
-                    Console.WriteLine($"{index}: {str[0]} ({str[1]})");
+                    Console.WriteLine($"{index}: {str[0]} ({PrittyfyString(str[1])})");
                 }
                 client.Close();
                 Console.WriteLine("Which link do you want to follow? (#)");
-                int.TryParse(Console.ReadLine(), out var userInput);
-
+                if (int.TryParse(Console.ReadLine(), out var userInput)) {
+                    
+                }
             }
         }
         public static List<string[]> ExtractLinks(string pageResponse) {
@@ -53,6 +53,9 @@ namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
             int first = str.IndexOf("<title>", StringComparison.OrdinalIgnoreCase) + 7;
             int last = str.LastIndexOf("</title>", StringComparison.OrdinalIgnoreCase);
             return str[first..last];
+        }
+        public static string PrittyfyString(string makePritty) {
+            return makePritty.Length > 15 ? String.Concat(makePritty.Substring(0, 6), "...", makePritty.Substring(makePritty.Length - 7, 6)) : makePritty;
         }
     }
 }
