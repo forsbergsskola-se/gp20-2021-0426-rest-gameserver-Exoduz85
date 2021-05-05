@@ -15,11 +15,17 @@ namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
         static StreamWriter sw;
         static NetworkStream stream;
         static TcpClient client;
+        static bool shouldRun = false;
         static void Main(string[] args) {
 
+            //shouldRun = true;
+
+            while (shouldRun) {
+                
+            }
+            
             client = new TcpClient(hostUrl, port);
             stream = client.GetStream();
-            sw = new StreamWriter(stream);
             sr = new StreamReader(stream);
             var encoding = Encoding.ASCII.GetBytes(request);
             stream.Write(encoding, 0, encoding.Length);
@@ -27,9 +33,11 @@ namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
             var header = ExtractHeader(response);
             var links = ExtractLinks(response);
             Console.WriteLine(header);
-            foreach (var str in links) {
-                Console.WriteLine($"{str[0]} {str[1]}");
+            for (var index = 0; index < links.Count; index++) {
+                var str = links[index];
+                Console.WriteLine($"{index}: {str[0]} {str[1]}");
             }
+
             client.Close();
         }
         public static List<string[]> ExtractLinks(string pageResponce) {
