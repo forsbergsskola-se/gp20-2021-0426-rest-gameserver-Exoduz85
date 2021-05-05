@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -17,6 +15,7 @@ namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
         static NetworkStream stream;
         static TcpClient client;
         static void Main(string[] args) {
+
             client = new TcpClient(hostUrl, port);
             stream = client.GetStream();
             sw = new StreamWriter(stream);
@@ -25,11 +24,19 @@ namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
             stream.Write(encoding, 0, encoding.Length);
             var response = sr.ReadToEnd();
             //Console.WriteLine(response);
-            int first = response.IndexOf(Constants.titleTag) + Constants.stepForward;
-            int last = response.LastIndexOf(Constants.endTitleTag);
+            int first = response.IndexOf(Constants.titleTag, StringComparison.OrdinalIgnoreCase) + Constants.stepForward;
+            int last = response.LastIndexOf(Constants.endTitleTag, StringComparison.OrdinalIgnoreCase);
             var text = response[first..last];
             Console.WriteLine(text);
             
+            List<int> htmlTag = response.AllIndexesOf("<a");
+            List<int> endHtmlTag = response.AllIndexesOf("</a>"); 
+            List<string> titles = htmlTag.GetString(9, endHtmlTag , response); 
+            foreach (var s in titles) {
+                Console.WriteLine(s);
+            }
+            
+            client.Close();
         }
     }
     public static class Constants {
