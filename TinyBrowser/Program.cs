@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
     class Program {
@@ -22,10 +25,21 @@ namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
             stream.Write(encoding, 0, encoding.Length);
             var response = sr.ReadToEnd();
             var header = ExtractHeader(response);
-            
+            var links = ExtractLinks(response);
             Console.WriteLine(header);
-            
+            foreach (var str in links) {
+                Console.WriteLine($"{str[0]} {str[1]}");
+            }
             client.Close();
+        }
+        public static List<string[]> ExtractLinks(string pageResponce) {
+            List<string[]> hyperLinks = new List<string[]>();
+            var regex = new Regex("<a href=[\"|'](?<link>.*?)[\"|'].*?>(<b>|<img.*?>)?(?<name>.*?)(</b>)?</a>", 
+                RegexOptions.IgnoreCase);
+            if (!regex.IsMatch(pageResponce)) return hyperLinks;
+            foreach(Match match in regex.Matches(pageResponce))
+                hyperLinks.Add(new []{match.Groups["name"].Value, match.Groups["link"].Value});
+            return hyperLinks;
         }
         public static string ExtractHeader(string str) {
             int first = str.IndexOf("<title>", StringComparison.OrdinalIgnoreCase) + 7;
