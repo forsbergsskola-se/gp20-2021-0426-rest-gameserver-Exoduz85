@@ -50,12 +50,14 @@ namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
             return hyperLinks;
         }
         public static string ExtractHeader(string str) {
-            int first = str.IndexOf("<title>", StringComparison.OrdinalIgnoreCase) + 7;
-            int last = str.LastIndexOf("</title>", StringComparison.OrdinalIgnoreCase);
+            var first = str.IndexOf("<title>", StringComparison.OrdinalIgnoreCase) + 7;
+            var last = str.LastIndexOf("</title>", StringComparison.OrdinalIgnoreCase);
             return str[first..last];
         }
         public static string PrittyfyString(string makePritty) {
-            return makePritty.Length > 15 ? String.Concat(makePritty.Substring(0, 6), "...", makePritty.Substring(makePritty.Length - 7, 6)) : makePritty;
+            return makePritty.Length > 15 ? String.Concat(makePritty.Substring(0, 6),
+                "...",
+                makePritty.Substring(makePritty.Length - 7, 6)) : makePritty;
         }
     }
 }
