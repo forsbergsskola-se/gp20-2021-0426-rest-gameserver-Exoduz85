@@ -40,12 +40,12 @@ namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
 
             }
         }
-        public static List<string[]> ExtractLinks(string pageResponce) {
+        public static List<string[]> ExtractLinks(string pageResponse) {
             List<string[]> hyperLinks = new List<string[]>();
             var regex = new Regex("<a href=[\"|'](?<link>.*?)[\"|'].*?>(<b>|<img.*?>)?(?<name>.*?)(</b>)?</a>", 
                 RegexOptions.IgnoreCase);
-            if (!regex.IsMatch(pageResponce)) return hyperLinks;
-            foreach(Match match in regex.Matches(pageResponce))
+            if (!regex.IsMatch(pageResponse)) return hyperLinks;
+            foreach(Match match in regex.Matches(pageResponse))
                 hyperLinks.Add(new []{match.Groups["name"].Value, match.Groups["link"].Value});
             return hyperLinks;
         }
