@@ -18,27 +18,27 @@ namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
         static bool shouldRun = false;
         static void Main(string[] args) {
 
-            //shouldRun = true;
+            shouldRun = true;
 
             while (shouldRun) {
-                
-            }
-            
-            client = new TcpClient(hostUrl, port);
-            stream = client.GetStream();
-            sr = new StreamReader(stream);
-            var encoding = Encoding.ASCII.GetBytes(request);
-            stream.Write(encoding, 0, encoding.Length);
-            var response = sr.ReadToEnd();
-            var header = ExtractHeader(response);
-            var links = ExtractLinks(response);
-            Console.WriteLine(header);
-            for (var index = 0; index < links.Count; index++) {
-                var str = links[index];
-                Console.WriteLine($"{index}: {str[0]} ({str[1]})");
-            }
+                client = new TcpClient(hostUrl, port);
+                stream = client.GetStream();
+                sr = new StreamReader(stream);
+                var encoding = Encoding.ASCII.GetBytes(request);
+                stream.Write(encoding, 0, encoding.Length);
+                var response = sr.ReadToEnd();
+                var header = ExtractHeader(response);
+                var links = ExtractLinks(response);
+                Console.WriteLine(header);
+                for (var index = 0; index < links.Count; index++) {
+                    var str = links[index];
+                    Console.WriteLine($"{index}: {str[0]} ({str[1]})");
+                }
+                client.Close();
+                Console.WriteLine("Which link do you want to follow? (#)");
+                int.TryParse(Console.ReadLine(), out var userInput);
 
-            client.Close();
+            }
         }
         public static List<string[]> ExtractLinks(string pageResponce) {
             List<string[]> hyperLinks = new List<string[]>();
