@@ -35,7 +35,7 @@ namespace gp20_2021_0426_rest_gameserver_Exoduz85 {
             Console.WriteLine(header);
             for (var index = 0; index < links.Count; index++) {
                 var str = links[index];
-                Console.WriteLine($"{index}: {str[0]} {str[1]}");
+                Console.WriteLine($"{index}: {str[0]} ({str[1]})");
             }
 
             client.Close();
