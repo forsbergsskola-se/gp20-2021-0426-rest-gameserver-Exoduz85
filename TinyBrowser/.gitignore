@@ -64,6 +64,3 @@ crashlytics-build.properties
 
 fmod_editor.log
 
-*.dll
-*.json
-
