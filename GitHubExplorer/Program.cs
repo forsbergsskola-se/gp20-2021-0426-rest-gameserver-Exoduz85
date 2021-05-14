@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace GitHubExplorer
 {
@@ -41,6 +42,13 @@ namespace GitHubExplorer
                             foreach (var organization in organizations) {
                                 Console.WriteLine($"{user.name}'s organizations:\nOrg. gitname: {organization.login}.\nOrg. url: {organization.url}" +
                                                   $"\nDescription: {organization.description}\n");
+                                var getMembers = client.GetStringAsync(organization.url + "/members");
+                                List<Member> members = JsonSerializer.Deserialize<List<Member>>(getMembers.Result);
+                                
+                                // todo, ask if user wants to see all members.
+                                foreach (var member in members) {
+                                    Console.WriteLine($"Member: {member.login}\nGithub html page: {member.html_url}\n");
+                                }
                             }
                             break;
                         case 2:
@@ -63,6 +71,11 @@ namespace GitHubExplorer
         }
     }
 
+    public class Member {
+        public string login { get; set; }
+        public string url { get; set; }
+        public string html_url { get; set; }
+    }
     public class Organization {
         public string login { get; set; }
         public int id { get; set; }
