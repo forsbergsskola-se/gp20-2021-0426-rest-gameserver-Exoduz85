@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace GitHubExplorer
 {
     static class Program {
         static string userName;
+        static string host = "https://api.github.com";
         static void Main(string[] args) {
             while (true) {
+                var uri = host.StringUri("users/");
                 var client = new HttpClient
                 {
                     DefaultRequestHeaders =
@@ -69,8 +71,14 @@ namespace GitHubExplorer
                 }
             }
         }
+        static UriBuilder StringUri(this string host, string toPath) {
+            return new UriBuilder() {
+                Host = host,
+                Path = toPath,
+                Scheme = "Https"
+            };
+        }
     }
-
     public class Member {
         public string login { get; set; }
         public string url { get; set; }
