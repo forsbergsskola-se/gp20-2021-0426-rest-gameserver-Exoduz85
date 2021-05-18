@@ -8,7 +8,7 @@ namespace GitHubExplorer
 {
     static class Program {
         static string userName;
-        static string host = "https://api.github.com";
+        static string host = "api.github.com";
         static void Main(string[] args) {
             while (true) {
                 var uri = host.StringUri("users/");
@@ -20,7 +20,7 @@ namespace GitHubExplorer
                         UserAgent = {ProductInfoHeaderValue.Parse("request")},
                         Authorization = new AuthenticationHeaderValue("token", Secret.token)
                     },
-                    BaseAddress = new Uri("https://api.github.com/users/")
+                    BaseAddress = uri.Uri
                 };
                 Console.WriteLine("Hello, what user would you like to browse?");
                 userName = Console.ReadLine();
@@ -28,6 +28,8 @@ namespace GitHubExplorer
                 var response = client.GetStringAsync(client.BaseAddress + userName);
                 User user = JsonSerializer.Deserialize<User>(response.Result);
                 Console.WriteLine($"{user.name} from {user.location}.\n");
+                
+                continueBrowsingUser:
                 
                 Console.WriteLine("What would you like to see next? \n(0) Followers\n(1) Organizations\n(2) Repositories\n(3) Quit\n");
                 var userSelect = int.TryParse(Console.ReadLine(), out var selection);
@@ -43,10 +45,16 @@ namespace GitHubExplorer
                             foreach (var organization in organizations) {
                                 Console.WriteLine($"{user.name}'s organizations:\nOrg. gitname: {organization.login}.\nOrg. url: {organization.url}" +
                                                   $"\nDescription: {organization.description}\n");
+                                askAgain:
+                                Console.WriteLine("Do you want to list the organizations members? \n(1) Yes\n(2) No\n");
+                                var orgMemberDisplay = int.TryParse(Console.ReadLine(), out var select);
+                                if (!orgMemberDisplay) {
+                                    Console.WriteLine("Invalid input");
+                                    goto askAgain;
+                                }
+                                if (select == 2) break;
                                 var getMembers = client.GetStringAsync(organization.url + "/members");
                                 List<Member> members = JsonSerializer.Deserialize<List<Member>>(getMembers.Result);
-                                
-                                // todo, ask if user wants to see all members.
                                 foreach (var member in members) {
                                     Console.WriteLine($"Member: {member.login}\nGithub html page: {member.html_url}\n");
                                 }
@@ -62,6 +70,14 @@ namespace GitHubExplorer
                         case 3:
                             return;
                     }
+                    invalidInput:
+                    Console.WriteLine($"Do you want to continue browsing {user.name}?\n(1) Yes\n(2) No\n");
+                    var continueBrowse = int.TryParse(Console.ReadLine(), out var browse);
+                    if (!continueBrowse) {
+                        Console.WriteLine("Invalid input");
+                        goto invalidInput;
+                    }
+                    if(browse == 1) goto continueBrowsingUser;
                 }
                 else {
                     client.Dispose();
@@ -77,19 +93,5 @@ namespace GitHubExplorer
                 Scheme = "Https"
             };
         }
-    }
-    public class Member {
-        public string login { get; set; }
-        public string url { get; set; }
-        public string html_url { get; set; }
-    }
-    public class Organization {
-        public string login { get; set; }
-        public int id { get; set; }
-        public string url { get; set; }
-        public string repos_url { get; set; }
-        public string members_url { get; set; }
-        public string public_members_url { set; get; }
-        public string description { set; get; }
     }
 }
