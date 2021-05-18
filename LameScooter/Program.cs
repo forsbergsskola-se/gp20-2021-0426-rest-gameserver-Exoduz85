@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LameScooter
 {
     class Program
     {
-        
-        static void Main(string[] args)
-        {
-            Console.WriteLine(args);
+        static async Task Main(string[] args) {
+            ILameScooterRental rental = null;
+            var count = await rental.GetScooterCountInStation(args[0]);
+            Console.WriteLine($"Number of Scooters Available at {args[0]}: {count}");
         }
     }
 
-    public class Station {
+    public class Station{
         public int id { get; set; }
         public string name { get; set; }
         public float x { get; set; }
@@ -27,5 +28,9 @@ namespace LameScooter
         public string state { get; set; }
         public List<string> networks { get; set; }
         public bool realTimeData { get; set; }
+    }
+    public interface ILameScooterRental
+    {
+        Task<int> GetScooterCountInStation(string stationName);
     }
 }
