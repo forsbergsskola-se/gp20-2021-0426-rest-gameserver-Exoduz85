@@ -18,17 +18,17 @@ namespace LameScooter {
             var NotFoundException = new Exception($"Could not find: {stationName}");
             throw NotFoundException;
         }
-        static List<Station> DeprecatedDeserialized(string data) {
-            List<Station> result = new List<Station>();
+        List<Station> DeprecatedDeserialized(string data) {
+            var result = new List<Station>();
             var regex = new Regex("(?<name>\\w*?)\\s*?:\\s*?(?<count>\\d*?)\\r\\n",RegexOptions.IgnoreCase);
-            if(regex.IsMatch(data))
-                foreach(Match match in regex.Matches(data)) {
-                    Station station = new Station{
-                        name = match.Groups["name"].Value,
-                        bikesAvailable = int.Parse(match.Groups["count"].Value)
-                    };
-                    result.Add(station);
-                }
+            if (!regex.IsMatch(data)) return result;
+            foreach(Match match in regex.Matches(data)) {
+                var station = new Station{
+                    name = match.Groups["name"].Value,
+                    bikesAvailable = int.Parse(match.Groups["count"].Value)
+                };
+                result.Add(station);
+            }
             return result;
         }
     }
