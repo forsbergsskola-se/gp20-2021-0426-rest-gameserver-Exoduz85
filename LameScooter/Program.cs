@@ -15,7 +15,7 @@ namespace LameScooter
                     "offline" => new OfflineLameScooterRental(),
                     "deprecated" => new DeprecatedLameScooterRental(),
                     "realtime" => new RealTimeLameScooterRental(),
-                    //"mongodb" => new MongoDBLameScooterRental(),
+                    "mongodb" => new MongoDBLameScooterRental(),
                     _ => null
                 };
                 var count = await rental.GetScooterCountInStation(args[0]);

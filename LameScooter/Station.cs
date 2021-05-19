@@ -1,9 +1,13 @@
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace LameScooter {
+    [BsonIgnoreExtraElements]
+    [BsonNoId]
     public class Station{
         public string id { get; set; }
         public string name { get; set; }
-        public float x { get; set; }
-        public float y { get; set; }
+        public double x { get; set; }
+        public double y { get; set; }
         public int bikesAvailable { get; set; }
         public int spaceAvailable { get; set; }
         public int capacity { get; set; }
