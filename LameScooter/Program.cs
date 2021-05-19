@@ -14,7 +14,7 @@ namespace LameScooter
                 ILameScooterRental rental = args[1].ToLower() switch {
                     "offline" => new OfflineLameScooterRental(),
                     "deprecated" => new DeprecatedLameScooterRental(),
-                    //"realtime" => new RealTimeLameScooterRental(),
+                    "realtime" => new RealTimeLameScooterRental(),
                     //"mongodb" => new MongoDBLameScooterRental(),
                     _ => null
                 };
