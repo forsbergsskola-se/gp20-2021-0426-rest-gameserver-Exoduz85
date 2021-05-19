@@ -10,6 +10,10 @@ namespace LameScooter
     class Program
     {
         static async Task Main(string[] args) {
+            // move throw to method getscootercountinstation, but catch it in main.
+            if (args[0].Any(char.IsDigit)) {
+                throw new ArgumentException("Argument may not contain any numbers");
+            }
             ILameScooterRental rental = new OfflineLameScooterRental();
             var count = await rental.GetScooterCountInStation(args[0]);
             Console.WriteLine($"Number of Scooters Available at {args[0]}: {count}");
