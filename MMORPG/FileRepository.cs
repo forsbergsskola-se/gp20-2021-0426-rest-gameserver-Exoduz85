@@ -1,21 +1,36 @@
 using System;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MMORPG {
-    public class FileRepository : IRepository{
-        public Task<Player> Get(Guid id) {
-            throw new NotImplementedException();
+    public partial class FileRepository : IRepository {
+        const string filePath = "game-dev.txt";
+        public async Task<Player> Get(Guid id) {
+            var playerData = await File.ReadAllTextAsync(filePath);
+            var players = JsonSerializer.Deserialize<Players>(playerData);
+            return players?.ListOfPlayers.FirstOrDefault(player => player.Id == id);
         }
 
-        public Task<Player[]> GetAll() {
-            throw new NotImplementedException();
+        public async Task<Player[]> GetAll() {
+            var playerData = await File.ReadAllTextAsync(filePath);
+            var players = JsonSerializer.Deserialize<Players>(playerData);
+            return players?.ListOfPlayers.ToArray();
         }
 
-        public Task<Player> Create(Player player) {
-            throw new NotImplementedException();
+        public async Task<Player> Create(Player player) {
+            var playerData = await File.ReadAllTextAsync(filePath);
+            var players = JsonSerializer.Deserialize<Players>(playerData);
+            players?.ListOfPlayers.Add(player);
+            var serialize = JsonSerializer.Serialize(players, typeof(Players));
+            await File.WriteAllTextAsync(filePath, serialize);
+            return player;
         }
 
-        public Task<Player> Modify(Guid id, ModifiedPlayer player) {
+        public async Task<Player> Modify(Guid id, ModifiedPlayer player) {
+            var playerData = await File.ReadAllTextAsync(filePath);
+            var players = JsonSerializer.Deserialize<Players>(playerData);
             throw new NotImplementedException();
         }
 
