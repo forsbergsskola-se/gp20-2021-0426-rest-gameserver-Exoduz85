@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 
 namespace MMORPG {
     public class PlayersController {
+        readonly IRepository repository;
+        public PlayersController(IRepository repository) {
+            this.repository = repository;
+        }
         public Task<Player> Get(Guid id) {
             throw new NotImplementedException();
         }
@@ -22,5 +26,6 @@ namespace MMORPG {
         public Task<Player> Delete(Guid id) {
             throw new NotImplementedException();
         }
+        
     }
 }
