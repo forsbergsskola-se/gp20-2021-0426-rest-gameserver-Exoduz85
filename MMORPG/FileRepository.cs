@@ -12,13 +12,11 @@ namespace MMORPG {
             var players = JsonSerializer.Deserialize<Players>(playerData);
             return players?.ListOfPlayers.FirstOrDefault(player => player.Id == id);
         }
-
         public async Task<Player[]> GetAll() {
             var playerData = await File.ReadAllTextAsync(filePath);
             var players = JsonSerializer.Deserialize<Players>(playerData);
             return players?.ListOfPlayers.ToArray();
         }
-
         public async Task<Player> Create(Player player) {
             var playerData = await File.ReadAllTextAsync(filePath);
             var players = JsonSerializer.Deserialize<Players>(playerData);
@@ -27,13 +25,17 @@ namespace MMORPG {
             await File.WriteAllTextAsync(filePath, serialize);
             return player;
         }
-
         public async Task<Player> Modify(Guid id, ModifiedPlayer player) {
             var playerData = await File.ReadAllTextAsync(filePath);
             var players = JsonSerializer.Deserialize<Players>(playerData);
-            throw new NotImplementedException();
+            foreach (var p in players.ListOfPlayers.Where(p => p.Id == id)) {
+                p.Score = player.Score;
+                var serialize = JsonSerializer.Serialize(players, typeof(Players));
+                await File.WriteAllTextAsync(filePath, serialize);
+                return p;
+            }
+            return null;
         }
-
         public Task<Player> Delete(Guid id) {
             throw new NotImplementedException();
         }
