@@ -9,6 +9,7 @@ namespace GitHubExplorer
     static class Program {
         static string userName;
         static string host = "api.github.com";
+        static int counter = 0;
         static void Main(string[] args) {
             while (true) {
                 var uri = host.StringUri("users/");
@@ -58,14 +59,25 @@ namespace GitHubExplorer
                                 foreach (var member in members) {
                                     Console.WriteLine($"Member: {member.login}\nGithub html page: {member.html_url}\n");
                                 }
+                                //ask if user wants to visit any of the members.
                             }
                             break;
-                        case 2:
+                        case 2: // users repositories, add possibility to open repo and add issue.
                             var repos = client.GetStringAsync(user.repos_url);
                             List<Repository> repositories = JsonSerializer.Deserialize<List<Repository>>(repos.Result);
+                            Dictionary<int, Repository> asDic = new Dictionary<int, Repository>();
+                            counter = 0;
                             foreach (var repo in repositories) {
-                                Console.WriteLine($"Repository name: {repo.name}, id: {repo.id}\n");
+                                asDic.Add(counter, repo);
+                                Console.WriteLine($"[{counter++}] Repo: {repo.name}, id: {repo.id}\n");
                             }
+                            Console.WriteLine("Which repository do you want to explore?");
+                            if (int.TryParse(Console.ReadLine(), out var answer)) {
+                                // load the repo here.
+                                var repo = client.GetStringAsync(asDic[answer].full_name); // change to correct thing here..
+                                Console.WriteLine(repo.Result);
+                            }
+                            
                             break;
                         case 3:
                             return;
